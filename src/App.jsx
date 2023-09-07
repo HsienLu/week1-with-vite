@@ -73,7 +73,7 @@ const minu=(product,id)=>{
   
   return( product.map((u)=>{
     if(id===u.id){
-      console.log({...u, stock:u.stock-1})
+      
       return {...u, stock:u.stock-1}
   }else{
     return{...u}
@@ -81,13 +81,24 @@ const minu=(product,id)=>{
  
   }))
 }
-
+const add=(id,product)=>{
+  return product.map((u)=>{
+    if(u.id===id){
+      return({...u,stock:u.stock+1})
+    }else{
+      return{...u}
+    }
+    
+  })
+}
 
 const handleminu=(id)=>{
   console.log(minu(product,id))
   setProduct(minu(product,id))
 }
-
+const handleadd=(id)=>{
+  setProduct(add(id,product))
+}
 return (<>
   <table>
   <thead>
@@ -117,16 +128,8 @@ return (<>
         
         > - </button> {v.stock} <button
         
-        onClick={
-          ()=>{
-            const newProduct=product.map((u)=>{
-              if(u.id===v.id){
-                return({...u,stock:u.stock+1})
-              }
-              return u
-            })
-            setProduct(newProduct)
-          }
+        onClick={   ()=>{handleadd(v.id)  }  
+             
         }
         
         > + </button></th>

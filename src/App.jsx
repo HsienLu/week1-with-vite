@@ -67,15 +67,7 @@ function App() {
     },
   ];
   const [product, setProduct] = useState(data);
-  const itemChange = (id, e) => {
-    return product.map((v) => {
-      if (v.id === id) {
-        return { ...v, item: e.target.value };
-      } else {
-        return { ...v };
-      }
-    });
-  };
+  const [edit, setEdit] = useState("com");
   const minu = (product, id) => {
     return product.map((u) => {
       if (id === u.id) {
@@ -96,14 +88,10 @@ function App() {
   };
 
   const handleminu = (id) => {
-    console.log(minu(product, id));
     setProduct(minu(product, id));
   };
   const handleadd = (id) => {
     setProduct(add(id, product));
-  };
-  const handleItem = (id, e) => {
-    setProduct(itemChange(id, e));
   };
   return (
     <>
@@ -114,18 +102,18 @@ function App() {
             <th scope="col">描述</th>
             <th scope="col">價格</th>
             <th scope="col">庫存</th>
-            <th scope="col">修改</th>
+            <th scope="col">編輯</th>
           </tr>
         </thead>
 
         {product.map((v) => {
           return (
             <tr key={v.id}>
-              <th scope="col">{v.item}</th>
-              <th scope="col">{v.desc}</th>
-              <th scope="col">{v.price}</th>
+              <td scope="col">{v.item}</td>
+              <td scope="col">{v.desc}</td>
+              <td scope="col">{v.price}</td>
 
-              <th scope="col">
+              <td scope="col">
                 <button
                   onClick={() => {
                     handleminu(v.id);
@@ -141,16 +129,43 @@ function App() {
                 >
                   +
                 </button>
-              </th>
-              <th>
-                <button>修改</button>
-                <input
-                  name="change"
-                  onChange={(e) => {
-                    handleItem(v.id, e);
-                  }}
-                ></input>
-              </th>
+              </td>
+
+              <td scope="col">
+                {edit === "edit" ? (
+                  <>
+                    {" "}
+                    <input
+                      type="text"
+                      onChange={(e) => {
+                        const newEdit = data.map((u) => {
+                          if (v.id === u.id) {
+                            return { ...u, item: e.target.value };
+                          } else {
+                            return { ...u };
+                          }
+                        });
+                        setProduct(newEdit);
+                      }}
+                    />
+                    <button
+                      onClick={() => {
+                        setEdit("com");
+                      }}
+                    >
+                      完成
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setEdit("edit");
+                    }}
+                  >
+                    編輯
+                  </button>
+                )}
+              </td>
             </tr>
           );
         })}

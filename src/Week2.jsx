@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function Week2() {
   const data = [
@@ -51,6 +51,18 @@ export default function Week2() {
       price: 60,
     },
   ];
+  const [item, setItem] = useState([]);
+  const handleAddItem = (v) => {
+    setItem([
+      ...item,
+      {
+        name: v.name,
+        description: v.description,
+        count: 1,
+        price: v.price,
+      },
+    ]);
+  };
   return (
     <>
       <div class="container mt-5">
@@ -63,9 +75,12 @@ export default function Week2() {
                     key={v.id}
                     href="#"
                     class="list-group-item list-group-item-action"
+                    onClick={() => {
+                      handleAddItem(v);
+                    }}
                   >
-                    <div class="d-flex w-100 justify-content-between">
-                      <h5 class="mb-1">{v.name}</h5>
+                    <div className="d-flex w-100 justify-content-between">
+                      <h5 className="mb-1">{v.name}</h5>
                       <small>{v.price}</small>
                     </div>
                     <p class="mb-1">{v.description}</p>
@@ -91,60 +106,45 @@ export default function Week2() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <button type="button" class="btn btn-sm">
-                      x
-                    </button>
+                {item.length !== 0 ? (
+                  item.map((v, i) => {
+                    return (
+                      <tr key={i}>
+                        <td>
+                          <button type="button" class="btn btn-sm">
+                            x
+                          </button>
+                        </td>
+                        <td>{v.name}</td>
+                        <td>
+                          <small>{v.description}</small>
+                        </td>
+                        <td>
+                          <select class="form-select" value={v.count}>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                          </select>
+                        </td>
+                        <td>{v.price}</td>
+                        <td>{v.count * v.price}</td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <td colspan="6">
+                    <p className="my-3 border border-primary rounded bg-primary-subtle">
+                      請加入商品
+                    </p>
                   </td>
-                  <td>四季春茶</td>
-                  <td>
-                    <small>香醇四季春茶，回甘無比</small>
-                  </td>
-                  <td>
-                    <select class="form-select">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
-                      <option value="10">10</option>
-                    </select>
-                  </td>
-                  <td>45</td>
-                  <td>45</td>
-                </tr>
-                <tr>
-                  <td>
-                    <button type="button" class="btn btn-sm">
-                      x
-                    </button>
-                  </td>
-                  <td>翡翠檸檬</td>
-                  <td>
-                    <small>綠茶與檸檬的完美結合</small>
-                  </td>
-                  <td>
-                    <select class="form-select">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
-                      <option value="10">10</option>
-                    </select>
-                  </td>
-                  <td>55</td>
-                  <td>55</td>
-                </tr>
+                )}
               </tbody>
             </table>
             <div class="text-end mb-3">
@@ -177,6 +177,7 @@ export default function Week2() {
                         <th scope="col">小計</th>
                       </tr>
                     </thead>
+
                     <tbody>
                       <tr>
                         <td>翡翠檸檬</td>

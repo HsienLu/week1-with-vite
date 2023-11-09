@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Week2() {
   const data = [
@@ -52,10 +52,15 @@ export default function Week2() {
     },
   ];
   const [item, setItem] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [note, setNote] = useState("");
+  const [text, setText] = useState("");
+  const [list, setList] = useState([]);
   const handleAddItem = (v) => {
     setItem([
       ...item,
       {
+        id: v.id,
         name: v.name,
         description: v.description,
         count: 1,
@@ -63,6 +68,19 @@ export default function Week2() {
       },
     ]);
   };
+  useEffect(() => {
+    const newTotal = item.reduce((pre, cur) => {
+      return pre + cur.count * cur.price;
+    }, 0);
+    setTotal(newTotal);
+  }, [item]);
+  const handleList = () => {
+    setList(item);
+    setText(note);
+  };
+  useEffect(() => {
+    console.log(list);
+  }, [list]);
   return (
     <>
       <div class="container mt-5">
@@ -111,7 +129,17 @@ export default function Week2() {
                     return (
                       <tr key={i}>
                         <td>
-                          <button type="button" class="btn btn-sm">
+                          <button
+                            type="button"
+                            class="btn btn-sm"
+                            onClick={() => {
+                              const delItem = item.filter((u) => {
+                                return v.id !== u.id;
+                              });
+                              console.log(delItem);
+                              setItem(delItem);
+                            }}
+                          >
                             x
                           </button>
                         </td>
@@ -120,7 +148,20 @@ export default function Week2() {
                           <small>{v.description}</small>
                         </td>
                         <td>
-                          <select class="form-select" value={v.count}>
+                          <select
+                            class="form-select"
+                            value={v.count}
+                            onChange={(e) => {
+                              const newItem = item.map((u) => {
+                                if (u.id === v.id) {
+                                  return { ...u, count: e.target.value };
+                                } else {
+                                  return { ...u };
+                                }
+                              });
+                              setItem(newItem);
+                            }}
+                          >
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -149,16 +190,22 @@ export default function Week2() {
             </table>
             <div class="text-end mb-3">
               <h5>
-                總計: <span>$100</span>
+                總計: <span>{total}</span>
               </h5>
             </div>
             <textarea
               class="form-control mb-3"
               rows="3"
               placeholder="備註"
+              onChange={(e) => {
+                setNote(e.target.value);
+                // console.log(e.target.value);
+              }}
             ></textarea>
             <div class="text-end">
-              <button class="btn btn-primary">送出</button>
+              <button class="btn btn-primary" onClick={handleList}>
+                送出
+              </button>
             </div>
           </div>
         </div>
@@ -169,6 +216,7 @@ export default function Week2() {
               <div class="card-body">
                 <div class="card-title">
                   <h5>訂單</h5>
+
                   <table class="table">
                     <thead>
                       <tr>
@@ -177,31 +225,25 @@ export default function Week2() {
                         <th scope="col">小計</th>
                       </tr>
                     </thead>
-
                     <tbody>
-                      <tr>
-                        <td>翡翠檸檬</td>
-                        <td>7</td>
-                        <td>385</td>
-                      </tr>
-                      <tr>
-                        <td>冬瓜檸檬</td>
-                        <td>7</td>
-                        <td>315</td>
-                      </tr>
-                      <tr>
-                        <td>冬瓜檸檬</td>
-                        <td>4</td>
-                        <td>180</td>
-                      </tr>
+                      {list.map((v, i) => {
+                        return (
+                          <tr key={i}>
+                            <td>{v.name}</td>
+                            <td>{v.count}</td>
+                            <td>{v.count * v.price}</td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
+
                   <div class="text-end">
-                    備註: <span>都不要香菜</span>
+                    備註: <span>{text}</span>
                   </div>
                   <div class="text-end">
                     <h5>
-                      總計: <span>$145</span>
+                      總計: <span>{total}</span>
                     </h5>
                   </div>
                 </div>

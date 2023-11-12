@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import ListGroup from "../component/ListGroup";
+import Table from "../component/Table";
+import Card from "../component/Card";
 
 export default function Week2() {
   const data = [
@@ -115,16 +118,17 @@ export default function Week2() {
   }, [list]);
   return (
     <>
-      <div class="container mt-5">
-        <div class="row">
-          <div class="col-md-4">
-            <div class="list-group">
+      <div className="container mt-5">
+        <div className="row">
+          <div className="col-md-4">
+            <ListGroup data={data} handleAddItem={handleAddItem} />
+            {/* <div className="list-group">
               {data.map((v, i) => {
                 return (
                   <a
                     key={v.id}
                     href="#"
-                    class="list-group-item list-group-item-action"
+                    className="list-group-item list-group-item-action"
                     onClick={() => {
                       handleAddItem(v);
                     }}
@@ -133,147 +137,27 @@ export default function Week2() {
                       <h5 className="mb-1">{v.name}</h5>
                       <small>{v.price}</small>
                     </div>
-                    <p class="mb-1">{v.description}</p>
+                    <p className="mb-1">{v.description}</p>
                   </a>
                 );
               })}
-            </div>
+            </div> */}
           </div>
-          <div class="col-md-8">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col" width="50">
-                    操作
-                  </th>
-                  <th scope="col">品項</th>
-                  <th scope="col">描述</th>
-                  <th scope="col" width="90">
-                    數量
-                  </th>
-                  <th scope="col">單價</th>
-                  <th scope="col">小計</th>
-                </tr>
-              </thead>
-              <tbody>
-                {item.length !== 0 ? (
-                  item.map((v, i) => {
-                    return (
-                      <tr key={i}>
-                        <td>
-                          <button
-                            type="button"
-                            class="btn btn-sm"
-                            onClick={() => {
-                              const delItem = item.filter((u) => {
-                                return v.id !== u.id;
-                              });
-                              console.log(delItem);
-                              setItem(delItem);
-                            }}
-                          >
-                            x
-                          </button>
-                        </td>
-                        <td>{v.name}</td>
-                        <td>
-                          <small>{v.description}</small>
-                        </td>
-                        <td>
-                          <select
-                            className="form-select"
-                            value={v.count}
-                            onChange={(e) =>
-                              handleChangeCount(e.target.value, v.id)
-                            }
-                          >
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                          </select>
-                        </td>
-                        <td>{v.price}</td>
-                        <td>{v.count * v.price}</td>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  <td colspan="6">
-                    <p className="my-3 border border-primary rounded bg-primary-subtle">
-                      請加入商品
-                    </p>
-                  </td>
-                )}
-              </tbody>
-            </table>
-            <div class="text-end mb-3">
-              <h5>
-                總計: <span>{total}</span>
-              </h5>
-            </div>
-            <textarea
-              class="form-control mb-3"
-              rows="3"
-              placeholder="備註"
-              onChange={(e) => {
-                setNote(e.target.value);
-                // console.log(e.target.value);
-              }}
-            ></textarea>
-            <div class="text-end">
-              <button class="btn btn-primary" onClick={handleList}>
-                送出
-              </button>
-            </div>
+          <div className="col-md-8">
+            <Table
+              item={item}
+              setItem={setItem}
+              handleChangeCount={handleChangeCount}
+              total={total}
+              setNote={setNote}
+              handleList={handleList}
+            />
           </div>
         </div>
         <hr />
-        <div class="row justify-content-center">
-          <div class="col-8">
-            <div class="card">
-              <div class="card-body">
-                <div class="card-title">
-                  <h5>訂單</h5>
-
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">品項</th>
-                        <th scope="col">數量</th>
-                        <th scope="col">小計</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {list.map((v, i) => {
-                        return (
-                          <tr key={i}>
-                            <td>{v.name}</td>
-                            <td>{v.count}</td>
-                            <td>{v.count * v.price}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-
-                  <div class="text-end">
-                    備註: <span>{text}</span>
-                  </div>
-                  <div class="text-end">
-                    <h5>
-                      總計: <span>{newTotal}</span>
-                    </h5>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div className="row justify-content-center">
+          <div className="col-8">
+            <Card list={list} text={text} newTotal={newTotal} />
           </div>
         </div>
       </div>

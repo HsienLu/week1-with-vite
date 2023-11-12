@@ -56,18 +56,49 @@ export default function Week2() {
   const [note, setNote] = useState("");
   const [text, setText] = useState("");
   const [list, setList] = useState([]);
-  const handleAddItem = (v) => {
-    setItem([
-      ...item,
-      {
-        id: v.id,
-        name: v.name,
-        description: v.description,
-        count: 1,
-        price: v.price,
-      },
-    ]);
+  const [newTotal, setNewTotal] = useState(0);
+  const handleChangeCount = (value, id) => {
+    const newItem = item.map((u) => {
+      if (u.id === id) {
+        return { ...u, count: value };
+      } else {
+        return { ...u };
+      }
+    });
+    setItem(newItem);
   };
+  const handleAddItem = (v) => {
+    let hashName = item.map((u) => {
+      if (v.name === u.name) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    if (hashName.includes(true)) {
+      const itemToo = item.map((u) => {
+        if (v.id === u.id) {
+          return { ...u, count: parseInt(u.count) + 1 };
+        } else {
+          return u; // 對於其他項目，返回原始物件
+        }
+      });
+      console.log(itemToo);
+      setItem(itemToo);
+    } else {
+      setItem([
+        ...item,
+        {
+          id: v.id,
+          name: v.name,
+          description: v.description,
+          count: 1,
+          price: v.price,
+        },
+      ]);
+    }
+  };
+
   useEffect(() => {
     const newTotal = item.reduce((pre, cur) => {
       return pre + cur.count * cur.price;
@@ -77,6 +108,7 @@ export default function Week2() {
   const handleList = () => {
     setList(item);
     setText(note);
+    setNewTotal(total);
   };
   useEffect(() => {
     console.log(list);
@@ -149,18 +181,11 @@ export default function Week2() {
                         </td>
                         <td>
                           <select
-                            class="form-select"
+                            className="form-select"
                             value={v.count}
-                            onChange={(e) => {
-                              const newItem = item.map((u) => {
-                                if (u.id === v.id) {
-                                  return { ...u, count: e.target.value };
-                                } else {
-                                  return { ...u };
-                                }
-                              });
-                              setItem(newItem);
-                            }}
+                            onChange={(e) =>
+                              handleChangeCount(e.target.value, v.id)
+                            }
                           >
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -243,7 +268,7 @@ export default function Week2() {
                   </div>
                   <div class="text-end">
                     <h5>
-                      總計: <span>{total}</span>
+                      總計: <span>{newTotal}</span>
                     </h5>
                   </div>
                 </div>

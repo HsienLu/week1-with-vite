@@ -3,12 +3,13 @@ import Week1 from "./week1";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Nav from "./nav";
 import Week2 from "./Week2";
+import Week3 from "./week3";
 function App() {
   const [week, setWeek] = useState(0);
   if (week === 0) {
     return (
       <>
-        <Week2 />
+        <Week3 />
         {/* <Nav setWeek={setWeek} /> */}
         {/* <h1 style={{ textAlign: "left" }}>我的react六角作業</h1>
          */}
